@@ -82,14 +82,25 @@ WSGI_APPLICATION = 'coopadmin.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
+# local
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'ustpcoop_db',
+#         'USERNAME': 'jevyies',
+#         'PASSWORD': '123456',
+#         'HOST': 'localhost',
+#         'PORT': '3306',
+#     }
+# }
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'ustpcoop_db',
-        'USERNAME': 'jevyies',
-        'PASSWORD': '123456',
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'ustpcoop',
+        'USER': 'jevyies',
+        'PASSWORD': '123',
         'HOST': 'localhost',
-        'PORT': '3306',
+        'PORT': '',
     }
 }
 
