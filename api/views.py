@@ -132,7 +132,7 @@ class WithdrawalSlipList(APIView):
             with open("static/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "wb") as fh:
                 fh.write(base64.b64decode(request.data.get('image')))
             keras_models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
-            result = DeepFace.verify("static/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "static/member-"+ str(request.data.get('account')) +".jpg", model_name = keras_models[0])
+            result = DeepFace.verify("static/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "static/member-"+ str(request.data.get('account')) +".jpg", model_name = keras_models[1])
             if(result['verified'] == False):
                 return Response({'success': False, 'message': 'Face Verification Failed'}, status=status.HTTP_200_OK)
             else:
