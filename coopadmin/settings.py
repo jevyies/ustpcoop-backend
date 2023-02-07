@@ -11,8 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
-from os import path
-
+import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -24,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1gma5e(o0j29t#pwszxh=myo+o85ybtml$tao*+=ds73o(#^w_'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['139.59.237.248']
 
@@ -139,13 +138,13 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
-STATIC_URL = 'static/'
-# MEDIA_ROOT = path.join(BASE_DIR, 'member-images')
-# MEDIA_URL = '/member-images/'
-# WITHDRAWAL_ROOT = path.join(BASE_DIR, 'withdrawal-images')
-# WITHDRAWAL_URL = '/withdrawal-images/'
-# DEPOSIT_ROOT = path.join(BASE_DIR, 'deposit-images')
-# DEPOSIT_URL = '/deposit-images/'
+STATIC_URL = '/static/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'member-images')
+MEDIA_URL = '/member-images/'
+WITHDRAWAL_ROOT = os.path.join(BASE_DIR, 'withdrawal-images')
+WITHDRAWAL_URL = '/withdrawal-images/'
+DEPOSIT_ROOT = os.path.join(BASE_DIR, 'deposit-images')
+DEPOSIT_URL = '/deposit-images/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
