@@ -140,12 +140,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-MEDIA_ROOT = path.join(BASE_DIR, 'member-images')
-MEDIA_URL = '/member-images/'
-WITHDRAWAL_ROOT = path.join(BASE_DIR, 'withdrawal-images')
-WITHDRAWAL_URL = '/withdrawal-images/'
-DEPOSIT_ROOT = path.join(BASE_DIR, 'deposit-images')
-DEPOSIT_URL = '/deposit-images/'
+# MEDIA_ROOT = path.join(BASE_DIR, 'member-images')
+# MEDIA_URL = '/member-images/'
+# WITHDRAWAL_ROOT = path.join(BASE_DIR, 'withdrawal-images')
+# WITHDRAWAL_URL = '/withdrawal-images/'
+# DEPOSIT_ROOT = path.join(BASE_DIR, 'deposit-images')
+# DEPOSIT_URL = '/deposit-images/'
 
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
