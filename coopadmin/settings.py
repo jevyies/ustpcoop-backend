@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1gma5e(o0j29t#pwszxh=myo+o85ybtml$tao*+=ds73o(#^w_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ['139.59.237.248']
+ALLOWED_HOSTS = ['128.199.68.239']
 
 
 # Application definition
@@ -72,7 +72,7 @@ TEMPLATES = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost",
+    "http://localhost", "http://128.199.68.239",
 ]
 
 WSGI_APPLICATION = 'coopadmin.wsgi.application'
