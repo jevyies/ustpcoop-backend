@@ -95,7 +95,7 @@ WSGI_APPLICATION = 'coopadmin.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'ustpcoop',
+        'NAME': 'ustpcoopdb',
         'USER': 'jevyies',
         'PASSWORD': '123',
         'HOST': 'localhost',
