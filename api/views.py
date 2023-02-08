@@ -7,7 +7,7 @@ import base64
 import datetime
 from deepface import DeepFace
 from rest_framework.parsers import MultiPartParser, FormParser
-from django.db.models import Value, CharField
+from django.db.models import Value, CharField, Sum, F
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -19,9 +19,17 @@ from .models import Account, WithdrawalSlip, DepositSlip, TransactionRequest
 # for Account
 class AccountList(APIView):
     def get(self, request, format=None):
-        snippets = Account.objects.all()
-        serializer = AccountSerializer(snippets, many=True)
-        return Response(serializer.data)
+        if(request.query_params.get('purpose') == 'get_balance'):
+            deposit = DepositSlip.objects.filter(account=request.query_params.get('id'), status='approved').aggregate(total=Sum(F('total_amount')))
+            withdrawal = WithdrawalSlip.objects.filter(account=request.query_params.get('id'), status='approved').aggregate(total=Sum(F('total_amount')))
+            depositAmt = deposit['total'] if deposit['total'] is not None else 0
+            withdrawalAmt = withdrawal['total'] if withdrawal['total'] is not None else 0
+            balance = depositAmt - withdrawalAmt
+            return Response({'balance': balance}, status=status.HTTP_200_OK)
+        else:
+            snippets = Account.objects.all()
+            serializer = AccountSerializer(snippets, many=True)
+            return Response(serializer.data)
 
     def post(self, request, format=None):
         if(request.data.get('purpose') == 'register'):
@@ -56,7 +64,6 @@ class AccountList(APIView):
             serializer = AccountSerializer(snippet, data=request.data)
             if serializer.is_valid():
                 account = serializer.save()
-                account.account_no = datetime.date.today().strftime("%Y%m") + '-' + str(snippet.id).rjust(6, '0')
                 account.date_approved = datetime.date.today()
                 account.save()
                 if(account.account_status == 'approved'):
@@ -69,7 +76,6 @@ class AccountList(APIView):
                             fail_silently=False,
                         )
                     except Exception as e:
-                        print(e)
                         return Response({'success': False, 'message': 'No connection could be made because the target machine actively refused it'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 return Response({'success': True, 'message': 'Successfully '+request.data.get('account_status')}, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
