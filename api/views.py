@@ -67,6 +67,8 @@ class AccountList(APIView):
                 account.date_approved = datetime.date.today()
                 account.save()
                 if(account.account_status == 'approved'):
+                    depositSerializer = DepositSlipSerializer(data={'account': account.id, 'total_amount': 50, 'status': 'approved', 'date_approved': datetime.date.today()})
+                    depositSerializer.save()
                     try:
                         send_mail(
                             'Account Approved',
