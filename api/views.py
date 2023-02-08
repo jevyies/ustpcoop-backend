@@ -10,6 +10,7 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django.db.models import Value, CharField, Sum, F
 from django.core.mail import send_mail
 from django.conf import settings
+import cv2
 
 
 from .serializer import AccountSerializer, WithdrawalSlipSerializer, DepositSlipSerializer, TransactionRequestSerializer
@@ -147,9 +148,9 @@ class WithdrawalSlipList(APIView):
         if(request.data.get('purpose') == 'request_withdrawal'):
             with open("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "wb") as fh:
                 fh.write(base64.b64decode(request.data.get('image')))
-            # keras_models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
-            # model_name = "DeepID"
-            # model = DeepFace.build_model(model_name)
+            img = cv2.imread("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg")
+            if(img is None):
+                return Response({'success': False, 'message': 'Image is not valid'}, status=status.HTTP_200_OK)
             result = DeepFace.verify("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "media/member-"+ str(request.data.get('account')) +".jpg", model_name="DeepID", enforce_detection=False)
             if(result['verified'] == False):
                 return Response({'success': False, 'message': 'Face Verification Failed'}, status=status.HTTP_200_OK)
