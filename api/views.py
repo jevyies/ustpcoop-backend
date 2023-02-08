@@ -16,7 +16,10 @@ from .serializer import AccountSerializer, WithdrawalSlipSerializer, DepositSlip
 from .models import Account, WithdrawalSlip, DepositSlip, TransactionRequest
 
 model_name = "VGG-Face"
-DeepFace.build_model(model_name) 
+try:
+    model = DeepFace.build_model(model_name)
+except Exception as e:
+    print(e)
 # for Account
 class AccountList(APIView):
     def get(self, request, format=None):
