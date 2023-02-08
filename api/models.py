@@ -20,7 +20,7 @@ class Account(models.Model):
 class WithdrawalSlip(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     date_requested = models.DateField(default=datetime.date.today)
-    total_amount = models.CharField(max_length=500, null=False, blank=False)
+    total_amount = models.FloatField(default=0)
     image_path_passed = models.CharField(max_length=500, null=True, blank=True)
     status = models.CharField(max_length=10, null=False, blank=False, default='pending')
     date_approved = models.DateField(null=True, blank=True)
@@ -32,7 +32,7 @@ class WithdrawalSlip(models.Model):
 class DepositSlip(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     date_requested = models.DateField(default=datetime.date.today)
-    total_amount = models.CharField(max_length=500, null=False, blank=False)
+    total_amount = models.FloatField(default=0)
     image_path_passed = models.CharField(max_length=500, null=True, blank=True)
     status = models.CharField(max_length=10, null=False, blank=False, default='pending')
     date_approved = models.DateField(null=True, blank=True)
