@@ -15,11 +15,7 @@ from django.conf import settings
 from .serializer import AccountSerializer, WithdrawalSlipSerializer, DepositSlipSerializer, TransactionRequestSerializer
 from .models import Account, WithdrawalSlip, DepositSlip, TransactionRequest
 
-model_name = "DeepID"
-try:
-    model = DeepFace.build_model(model_name)
-except Exception as e:
-    print(e)
+
 # for Account
 class AccountList(APIView):
     def get(self, request, format=None):
@@ -137,8 +133,10 @@ class WithdrawalSlipList(APIView):
             with open("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "wb") as fh:
                 fh.write(base64.b64decode(request.data.get('image')))
             # keras_models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
+            # model_name = "DeepID"
+            # model = DeepFace.build_model(model_name)
             try:
-                result = DeepFace.verify("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "media/member-"+ str(request.data.get('account')) +".jpg")
+                result = DeepFace.verify("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "media/member-"+ str(request.data.get('account')) +".jpg", model_name="DeepID")
                 if(result['verified'] == False):
                     return Response({'success': False, 'message': 'Face Verification Failed'}, status=status.HTTP_200_OK)
                 else:
