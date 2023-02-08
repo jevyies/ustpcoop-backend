@@ -134,6 +134,7 @@ class WithdrawalSlipList(APIView):
             # keras_models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
             model_name = "VGG-Face"
             DeepFace.build_model(model_name) 
+            print('hey')
             try:
                 result = DeepFace.verify("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "media/member-"+ str(request.data.get('account')) +".jpg")
                 if(result['verified'] == False):
