@@ -34,18 +34,20 @@ class AccountList(APIView):
     def post(self, request, format=None):
         if(request.data.get('purpose') == 'register'):
             serializer = AccountSerializer(data=request.data)
-            search_account = Account.objects.filter(email=request.data.get('email'), account_type='member')
+            search_email = Account.objects.filter(email=request.data.get('email'), account_type='member')
+            search_account = Account.objects.filter(account_no=request.data.get('account_no'), account_type='member')
             if(search_account.exists()):
+                return Response({'account_exists': True}, status=status.HTTP_200_OK)
+            if(search_email.exists()):
                 return Response({'email_exists': True}, status=status.HTTP_200_OK)
-            else:
-                if serializer.is_valid():
-                    account = serializer.save()
-                    with open("media/member-"+ str(account.id) +".jpg", "wb") as fh:
-                        fh.write(base64.b64decode(request.data.get('image')))
-                    account.image_path = "media/member-"+ str(account.id) +".jpg"
-                    account.save()
-                    return Response(serializer.data, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            if serializer.is_valid():
+                account = serializer.save()
+                with open("media/member-"+ str(account.id) +".jpg", "wb") as fh:
+                    fh.write(base64.b64decode(request.data.get('image')))
+                account.image_path = "media/member-"+ str(account.id) +".jpg"
+                account.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif(request.data.get('purpose') == 'login'):
             try:
                 account = Account.objects.get(email=request.data.get('email'), account_type=request.data.get('type'))
@@ -162,12 +164,23 @@ class WithdrawalSlipList(APIView):
                     return Response({'success': True, 'data' : serializer.data}, status=status.HTTP_201_CREATED)
                 return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif(request.data.get('purpose') == 'change_status'):
+            account = Account.objects.get(id=request.data.get('account'))
             snippet = WithdrawalSlip.objects.get(id=request.data.get('id'))
             serializer = WithdrawalSlipSerializer(snippet, data=request.data)
             if serializer.is_valid():
                 withdraw = serializer.save()
                 withdraw.date_approved = datetime.date.today()
                 withdraw.save()
+                try:
+                    send_mail(
+                        'Application' + request.data.get('status'),
+                        'Your application for withdrawal has been ' + request.data.get('status') + ' by admin. You can see the logs in your dashboard.',
+                        settings.EMAIL_HOST_USER,
+                        [account.email],
+                        fail_silently=False,
+                    )
+                except Exception as e:
+                    return Response({'success': False, 'message': 'No connection could be made because the target machine actively refused it'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 return Response({'success': True, 'message': 'Successfully '+request.data.get('status')}, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
@@ -223,12 +236,23 @@ class DepositSlipList(APIView):
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         elif(request.data.get('purpose') == 'change_status'):
+            account = Account.objects.get(id=request.data.get('account'))
             snippet = DepositSlip.objects.get(id=request.data.get('id'))
             serializer = DepositSlipSerializer(snippet, data=request.data)
             if serializer.is_valid():
                 deposit = serializer.save()
                 deposit.date_approved = datetime.date.today()
                 deposit.save()
+                try:
+                    send_mail(
+                        'Application' + request.data.get('status'),
+                        'Your application for withdrawal has been ' + request.data.get('status') + ' by admin. You can see the logs in your dashboard.',
+                        settings.EMAIL_HOST_USER,
+                        [account.email],
+                        fail_silently=False,
+                    )
+                except Exception as e:
+                    return Response({'success': False, 'message': 'No connection could be made because the target machine actively refused it'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
                 return Response({'success': True, 'message': 'Successfully '+request.data.get('status')}, status=status.HTTP_200_OK)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
         else:
