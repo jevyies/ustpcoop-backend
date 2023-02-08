@@ -27,9 +27,9 @@ class AccountList(APIView):
             serializer = AccountSerializer(data=request.data)
             if serializer.is_valid():
                 account = serializer.save()
-                with open("static/member-"+ str(account.id) +".jpg", "wb") as fh:
+                with open("media/member-"+ str(account.id) +".jpg", "wb") as fh:
                     fh.write(base64.b64decode(request.data.get('image')))
-                account.image_path = "static/member-"+ str(account.id) +".jpg"
+                account.image_path = "media/member-"+ str(account.id) +".jpg"
                 account.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -129,22 +129,26 @@ class WithdrawalSlipList(APIView):
 
     def post(self, request, format=None):
         if(request.data.get('purpose') == 'request_withdrawal'):
-            with open("static/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "wb") as fh:
+            with open("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "wb") as fh:
                 fh.write(base64.b64decode(request.data.get('image')))
-            keras_models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
-            result = DeepFace.verify("static/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "static/member-"+ str(request.data.get('account')) +".jpg", model_name = keras_models[1])
-            if(result['verified'] == False):
-                return Response({'success': False, 'message': 'Face Verification Failed'}, status=status.HTTP_200_OK)
-            else:
-                serializer = WithdrawalSlipSerializer(data=request.data)
-                if serializer.is_valid():
-                    withdrawal = serializer.save()
-                    with open("static/withdrawal-"+ str(withdrawal.id) +".jpg", "wb") as fh:
-                        fh.write(base64.b64decode(request.data.get('image')))
-                    withdrawal.image_path_passed = "static/withdrawal-"+ str(withdrawal.id) +".jpg"
-                    withdrawal.save()
-                    return Response({'success': True, 'data' : serializer.data}, status=status.HTTP_201_CREATED)
-                return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            # keras_models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
+            try:
+                result = DeepFace.verify("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "media/member-"+ str(request.data.get('account')) +".jpg")
+                if(result['verified'] == False):
+                    return Response({'success': False, 'message': 'Face Verification Failed'}, status=status.HTTP_200_OK)
+                else:
+                    serializer = WithdrawalSlipSerializer(data=request.data)
+                    if serializer.is_valid():
+                        withdrawal = serializer.save()
+                        with open("media/withdrawal-"+ str(withdrawal.id) +".jpg", "wb") as fh:
+                            fh.write(base64.b64decode(request.data.get('image')))
+                        withdrawal.image_path_passed = "media/withdrawal-"+ str(withdrawal.id) +".jpg"
+                        withdrawal.save()
+                        return Response({'success': True, 'data' : serializer.data}, status=status.HTTP_201_CREATED)
+                    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+            except Exception as e:
+                print(e)
+                return Response({'success': False, 'message': 'Deep Face error'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         elif(request.data.get('purpose') == 'change_status'):
             snippet = WithdrawalSlip.objects.get(id=request.data.get('id'))
             serializer = WithdrawalSlipSerializer(snippet, data=request.data)
@@ -200,9 +204,9 @@ class DepositSlipList(APIView):
             serializer = DepositSlipSerializer(data=request.data)
             if serializer.is_valid():
                 deposit = serializer.save()
-                with open("static/deposit-"+ str(deposit.id) +".jpg", "wb") as fh:
+                with open("media/deposit-"+ str(deposit.id) +".jpg", "wb") as fh:
                     fh.write(base64.b64decode(request.data.get('image')))
-                deposit.image_path_passed = "static/deposit-"+ str(deposit.id) +".jpg"
+                deposit.image_path_passed = "media/deposit-"+ str(deposit.id) +".jpg"
                 deposit.save()
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
