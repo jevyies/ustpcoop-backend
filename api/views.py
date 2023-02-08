@@ -15,7 +15,7 @@ from django.conf import settings
 from .serializer import AccountSerializer, WithdrawalSlipSerializer, DepositSlipSerializer, TransactionRequestSerializer
 from .models import Account, WithdrawalSlip, DepositSlip, TransactionRequest
 
-model_name = "VGG-Face"
+model_name = "FaceNet"
 try:
     model = DeepFace.build_model(model_name)
 except Exception as e:
