@@ -25,7 +25,7 @@ class AccountList(APIView):
             depositAmt = deposit['total'] if deposit['total'] is not None else 0
             withdrawalAmt = withdrawal['total'] if withdrawal['total'] is not None else 0
             balance = depositAmt - withdrawalAmt
-            return Response({'balance': balance}, status=status.HTTP_200_OK)
+            return Response({'balance': balance, 'deposit': depositAmt, 'withdrawal': withdrawalAmt}, status=status.HTTP_200_OK)
         else:
             snippets = Account.objects.all()
             serializer = AccountSerializer(snippets, many=True)
