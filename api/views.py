@@ -26,7 +26,7 @@ class AccountList(APIView):
     def post(self, request, format=None):
         if(request.data.get('purpose') == 'register'):
             serializer = AccountSerializer(data=request.data)
-            search_account = Account.objects.filter(email=request.query_params.get('email'), account_type='member')
+            search_account = Account.objects.filter(email=request.data.get('email'), account_type='member')
             if(search_account.exists()):
                 return Response({'email_exists': True}, status=status.HTTP_200_OK)
             else:
