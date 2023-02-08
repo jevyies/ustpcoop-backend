@@ -149,7 +149,10 @@ class WithdrawalSlipList(APIView):
             with open("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "wb") as fh:
                 fh.write(base64.b64decode(request.data.get('image')))
             img = cv2.imread("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg")
+            img2 = cv2.imread("media/member-"+ str(request.data.get('account')) +".jpg")
             if(img is None):
+                return Response({'success': False, 'message': 'Image is not valid'}, status=status.HTTP_200_OK)
+            if(img2 is None):
                 return Response({'success': False, 'message': 'Image is not valid'}, status=status.HTTP_200_OK)
             result = DeepFace.verify("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "media/member-"+ str(request.data.get('account')) +".jpg", model_name="DeepID", enforce_detection=False)
             if(result['verified'] == False):
