@@ -150,7 +150,7 @@ class WithdrawalSlipList(APIView):
             # keras_models = ["VGG-Face", "Facenet", "OpenFace", "DeepFace", "DeepID", "Dlib", "ArcFace"]
             # model_name = "DeepID"
             # model = DeepFace.build_model(model_name)
-            result = DeepFace.verify("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "media/member-"+ str(request.data.get('account')) +".jpg", model_name="DeepID")
+            result = DeepFace.verify("media/account-withdrawal-"+ str(request.data.get('account')) +".jpg", "media/member-"+ str(request.data.get('account')) +".jpg", model_name="DeepID", enforce_detection=False)
             if(result['verified'] == False):
                 return Response({'success': False, 'message': 'Face Verification Failed'}, status=status.HTTP_200_OK)
             else:
@@ -246,7 +246,7 @@ class DepositSlipList(APIView):
                 try:
                     send_mail(
                         'Application' + request.data.get('status'),
-                        'Your application for withdrawal has been ' + request.data.get('status') + ' by admin. You can see the logs in your dashboard.',
+                        'Your application for deposit has been ' + request.data.get('status') + ' by admin. You can see the logs in your dashboard.',
                         settings.EMAIL_HOST_USER,
                         [account.email],
                         fail_silently=False,
