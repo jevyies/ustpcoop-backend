@@ -177,8 +177,8 @@ class WithdrawalSlipList(APIView):
                 withdraw.save()
                 try:
                     send_mail(
-                        'USTP-COOP Application ' + request.data.get('status'),
-                        'Your application for withdrawal has been ' + request.data.get('status') + ' by admin. You can see the logs in your dashboard.',
+                        'Request ' + request.data.get('status'),
+                        'Your request for withdrawal has been ' + request.data.get('status') + ' by admin. You can see the logs in your dashboard.',
                         settings.EMAIL_HOST_USER,
                         [account.email],
                         fail_silently=False,
@@ -249,8 +249,8 @@ class DepositSlipList(APIView):
                 deposit.save()
                 try:
                     send_mail(
-                        'USTP-COOP Application ' + request.data.get('status'),
-                        'Your application for deposit has been ' + request.data.get('status') + ' by admin. You can see the logs in your dashboard.',
+                        'Request ' + request.data.get('status'),
+                        'Your request for deposit has been ' + request.data.get('status') + ' by admin. You can see the logs in your dashboard.',
                         settings.EMAIL_HOST_USER,
                         [account.email],
                         fail_silently=False,
