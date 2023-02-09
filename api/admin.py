@@ -4,11 +4,11 @@ from . models import Account, WithdrawalSlip, DepositSlip, TransactionRequest
 class AccountAdmin(admin.ModelAdmin):
     list_display = ('account_no', 'name', 'email', 'password', 'image_path', 'date_registered', 'date_approved', 'account_type', 'account_status')
 class WithdrawalSlipAdmin(admin.ModelAdmin):
-    list_display = ('account', 'date_requested', 'total_amount', 'image_path_passed', 'status', 'date_approved')
+    list_display = ('account', 'date_requested', 'total_amount', 'image_path_passed', 'status', 'date_approved', 'gcash')
 class DepositSlipAdmin(admin.ModelAdmin):
     list_display = ('account', 'date_requested', 'total_amount', 'image_path_passed', 'status', 'date_approved')
 class TransactionRequestAdmin(admin.ModelAdmin):
-    list_display = ('account', 'request_remarks', 'date_requested', 'gcash')
+    list_display = ('account', 'request_remarks', 'date_requested')
 
 admin.site.register(Account, AccountAdmin)
 admin.site.register(WithdrawalSlip, WithdrawalSlipAdmin)
