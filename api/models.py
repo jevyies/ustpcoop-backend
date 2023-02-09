@@ -24,6 +24,7 @@ class WithdrawalSlip(models.Model):
     image_path_passed = models.CharField(max_length=500, null=True, blank=True)
     status = models.CharField(max_length=10, null=False, blank=False, default='pending')
     date_approved = models.DateField(null=True, blank=True)
+    gcash = models.CharField(max_length=50, null=True, blank=True)
 
 
     def __str__(self):
