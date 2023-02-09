@@ -52,7 +52,7 @@ class AccountList(APIView):
         elif(request.data.get('purpose') == 'login'):
             try:
                 account = Account.objects.get(email=request.data.get('email'), account_type=request.data.get('type'))
-                if(account.account_no == ''):
+                if(account.account_status == 'pending'):
                     return Response({'not_yet_valid': True}, status=status.HTTP_200_OK)
                 else:
                     if(account.password == request.data.get('password')):
