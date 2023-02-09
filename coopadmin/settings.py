@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-1gma5e(o0j29t#pwszxh=myo+o85ybtml$tao*+=ds73o(#^w_
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['localhost', '139.59.239.49', 'ustpcoop-backend.online']
+ALLOWED_HOSTS = ['localhost', '139.59.239.49', 'ustpcoop-backend.online', 'www.ustpcoop-backend.online']
 
 
 # Application definition
