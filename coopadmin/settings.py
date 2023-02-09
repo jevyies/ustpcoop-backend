@@ -72,7 +72,7 @@ TEMPLATES = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost", "http://139.59.239.49",
+    "http://localhost", "https://ustp-coop.vercel.app",
 ]
 
 WSGI_APPLICATION = 'coopadmin.wsgi.application'
