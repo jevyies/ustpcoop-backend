@@ -296,8 +296,8 @@ class TransactionRequestList(APIView):
             return Response(serializer.data)
         else:
             if(request.query_params.get('purpose') == 'unite_transaction'):
-                qs1 = DepositSlip.objects.select_related('account').filter(date_requested__range=(request.query_params.get('from'), request.query_params.get('to'))).values('id', 'account__name', 'account__account_no', 'account', 'date_requested', 'total_amount', 'image_path_passed', 'status').annotate(transaction_type=Value('deposit', CharField()))
-                qs2 = WithdrawalSlip.objects.select_related('account').filter(date_requested__range=(request.query_params.get('from'), request.query_params.get('to'))).values('id', 'account__name', 'account__account_no', 'account', 'date_requested', 'total_amount', 'image_path_passed', 'status', 'gcash').annotate(transaction_type=Value('withdrawal', CharField()))
+                qs1 = DepositSlip.objects.select_related('account').filter(date_requested__range=(request.query_params.get('from'), request.query_params.get('to'))).values('id', 'account__name', 'account__account_no', 'account', 'date_requested', 'total_amount', 'image_path_passed', 'status').annotate(transaction_type=Value('deposit', CharField()), gcash=Value('', CharField()))
+                qs2 = WithdrawalSlip.objects.select_related('account').filter(date_requested__range=(request.query_params.get('from'), request.query_params.get('to'))).values('id', 'account__name', 'account__account_no', 'account', 'date_requested', 'total_amount', 'image_path_passed', 'status').annotate(transaction_type=Value('withdrawal', CharField()), gcash=F('gcash'))
                 snippet = qs1.union(qs2, all=True).order_by('-date_requested')
                 return Response(snippet)
             elif(request.query_params.get('purpose') == 'get_transaction_by_user'):
