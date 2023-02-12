@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Account, WithdrawalSlip, DepositSlip, TransactionRequest
+from .models import Account, WithdrawalSlip, DepositSlip, TransactionRequest, SettingSlip
 
 class AccountSerializer(serializers.ModelSerializer):
     class Meta:
@@ -18,5 +18,10 @@ class DepositSlipSerializer(serializers.ModelSerializer):
 
 class TransactionRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = DepositSlip
+        model = TransactionRequest
+        fields = '__all__'
+
+class SettingSlipSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SettingSlip
         fields = '__all__'

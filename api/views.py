@@ -13,8 +13,8 @@ from django.conf import settings
 import cv2
 
 
-from .serializer import AccountSerializer, WithdrawalSlipSerializer, DepositSlipSerializer, TransactionRequestSerializer
-from .models import Account, WithdrawalSlip, DepositSlip, TransactionRequest
+from .serializer import AccountSerializer, WithdrawalSlipSerializer, DepositSlipSerializer, TransactionRequestSerializer, SettingSlipSerializer
+from .models import Account, WithdrawalSlip, DepositSlip, TransactionRequest, SettingSlip
 
 
 # for Account
@@ -344,3 +344,24 @@ class TransactionRequestDetail(APIView):
         snippet = self.get_object(pk)
         snippet.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+class SettingList(APIView):
+    def get(self, request, format=None):
+        snippets = SettingSlip.objects.all()
+        serializer = SettingSlipSerializer(snippets, many=True)
+        return Response(serializer.data)
+
+    def post(self, request, format=None):
+        if(request.data.get('id') == '0'):
+            serializer = SettingSlipSerializer(data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_201_CREATED)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            snippet = SettingSlip.objects.get(pk=request.data.get('id'))
+            serializer = SettingSlipSerializer(snippet, data=request.data)
+            if serializer.is_valid():
+                serializer.save()
+                return Response(serializer.data)
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

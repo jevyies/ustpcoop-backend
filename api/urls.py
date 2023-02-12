@@ -12,5 +12,6 @@ urlpatterns = [
     path('withdrawal/<int:pk>/', views.WithdrawalSlipDetail.as_view()),
     path('transaction/', views.TransactionRequestList.as_view()),
     path('transaction/<int:pk>/', views.TransactionRequestDetail.as_view()),
+    path('setting/', views.SettingList.as_view()),
 ]
 urlpatterns = format_suffix_patterns(urlpatterns)

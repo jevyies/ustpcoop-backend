@@ -45,3 +45,6 @@ class TransactionRequest(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE)
     request_remarks = models.TextField(null=True, blank=True)
     date_requested = models.DateField(default=datetime.date.today)
+
+class SettingSlip(models.Model):
+    initial_balance = models.FloatField(default=0)
